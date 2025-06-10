@@ -1,0 +1,303 @@
+# SmartCart - Έξυπνο Καλάθι Αγορών
+
+**Πανεπιστήμιο Πειραιώς - ΠΜΣ Πληροφοριακά Συστήματα & Υπηρεσίες**  
+**Μάθημα:** Η Γλώσσα Προγραμματισμού Python  
+**Ακαδημαϊκό Έτος:** 2024-2025
+
+##  Περιγραφή Έργου
+
+Το SmartCart είναι ένα ολοκληρωμένο σύστημα έξυπνου καλαθιού αγορών για το ηλεκτρονικό κατάστημα UnipiShop. Το σύστημα περιλαμβάνει:
+
+-  **Διαχείριση Καλαθιού** - Προσθήκη, αφαίρεση, αγορά προϊόντων
+-  **Ανάλυση Δεδομένων** - Στατιστικά και προτάσεις βασισμένες σε ιστορικό
+-  **Web Scraping** - Σύγκριση τιμών από άλλα καταστήματα
+-  **AI Features** - Προτάσεις συνταγών και ανάλυση διατροφής
+-  **REST API** - Πλήρες API για όλες τις λειτουργίες
+-  **Web Interface** - Φιλική διεπαφή χρήστη
+
+##  Αρχιτεκτονική Συστήματος
+
+
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Streamlit UI  │◄──►│  Flask REST API │◄──►│ SQLite Database │
+│   (Port 8501)   │    │   (Port 5000)   │    │  smartcart.db   │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                               │
+                    ┌──────────┼──────────┐
+                    │          │          │
+               ┌─────▼──┐  ┌────▼───┐  ┌──▼──┐
+               │Analytics│  │Scraping│  │ AI  │
+               │Subsystem│  │Subsystem│  │ Sub │
+               └────────┘  └────────┘  └─────┘
+```
+
+## Δομή Αρχείων
+
+SmartCart/
+├── app.py                      # Flask Backend API
+├── ui.py                       # Streamlit Frontend
+├── requirements.txt            # Python dependencies
+├── README.md                   # Αυτό το αρχείο
+├── smartcart.db               # SQLite database (auto-created)
+└── SmartCart_Postman_Collection.json  # Postman API tests
+```
+
+## Εγκατάσταση και Εκτέλεση
+
+### Προαπαιτούμενα
+- Python 3.8+
+- pip (Python package manager)
+
+### Βήμα 1: Κλωνοποίηση/Λήψη
+```bash
+# Εάν χρησιμοποιείτε Git
+git clone [https://github.com/yklgx/SmartCart.git]
+cd SmartCart
+
+# Ή εξαγάγετε το ZIP αρχείο και μετακινηθείτε στον φάκελο
+```
+
+### Βήμα 2: Εγκατάσταση Dependencies
+```bash
+# Συνιστάται η χρήση virtual environment
+python -m venv venv
+
+# Ενεργοποίηση virtual environment
+# Windows:
+venv\Scripts\activate
+# Mac/Linux:
+source venv/bin/activate
+
+# Εγκατάσταση βιβλιοθηκών
+pip install -r requirements.txt
+```
+
+### Βήμα 3: Εκκίνηση Backend API
+```bash
+# Εκκίνηση Flask server
+python app.py
+```
+**Αποτέλεσμα:** 
+- API διαθέσιμο στο: `http://localhost:5000`
+- Database αρχικοποιείται αυτόματα με δεδομένα
+
+### Βήμα 4: Εκκίνηση Frontend (νέο terminal)
+```bash
+# Σε νέο terminal window
+cd SmartCart
+source venv/bin/activate  # (αν χρησιμοποιείτε virtual env)
+
+# Εκκίνηση Streamlit UI
+streamlit run ui.py
+```
+**Αποτέλεσμα:**
+- UI διαθέσιμη στο: `http://localhost:8501`
+- Αυτόματη σύνδεση με Flask API
+
+## Χρήση Συστήματος
+
+### Βασική Διαδικασία Αγοράς
+
+1. **Περιήγηση Προϊόντων**
+   - Μεταβείτε στο "Products and Shopping"
+   - Αναζητήστε προϊόντα (π.χ. "milk")
+   - Φιλτράρετε ανά κατηγορία
+   - Ταξινομήστε κατά όνομα ή τιμή
+
+2. **Δημιουργία Καλαθιού**
+   - Κλικ "New Cart"
+   - Προσθέστε προϊόντα στο καλάθι
+   - Ρυθμίστε ποσότητες
+
+3. **Ολοκλήρωση Αγοράς**
+   - Μεταβείτε στο "Cart Management"
+   - Ελέγξτε τα στοιχεία
+   - Κλικ "Complete Purchase"
+
+### Προηγμένες Λειτουργίες
+
+** Data Analysis:**
+- Προβολή στατιστικών αγορών
+- Ανάλυση δημοφιλών προϊόντων
+- Ιστορικό αγορών
+
+**Web Scraping:**
+- Σύγκριση τιμών προϊόντων
+- Εύρεση σχετικών προϊόντων
+- Ανάλυση "συχνά αγοράζονται μαζί"
+
+** AI Features:**
+- Προτάσεις συνταγών από επιλεγμένα προϊόντα
+- Ανάλυση διατροφικών συνηθειών
+- Αξιολόγηση nutrition score
+
+## API Endpoints
+
+### Διαχείριση Προϊόντων
+- `GET /api/products` - Λίστα προϊόντων
+- `GET /api/products?search=milk` - Αναζήτηση
+- `GET /api/products?category_id=1` - Φιλτράρισμα
+- `GET /api/categories` - Κατηγορίες
+
+### Διαχείριση Καλαθιού
+- `POST /api/cart` - Δημιουργία καλαθιού
+- `GET /api/cart/{id}` - Λεπτομέρειες καλαθιού
+- `POST /api/cart/{id}/add` - Προσθήκη προϊόντος
+- `DELETE /api/cart/{id}/remove/{item_id}` - Αφαίρεση
+- `POST /api/cart/{id}/purchase` - Αγορά
+
+### Ανάλυση & AI
+- `GET /api/stats` - Στατιστικά
+- `GET /api/purchases` - Ιστορικό
+- `GET /api/recommend-cart` - Προτάσεις καλαθιού
+- `POST /api/recipe-suggestion` - Συνταγές
+- `POST /api/nutrition-analysis` - Διατροφική ανάλυση
+
+##  Δοκιμή με Postman
+
+1. **Εισαγωγή Collection:**
+   - Ανοίξτε Postman
+   - Import → `SmartCart_Postman_Collection.json`
+
+2. **Δοκιμή Endpoints:**
+   - Ξεκινήστε με "Get All Products"
+   - Δημιουργήστε καλάθι με "Create New Cart"
+   - Προσθέστε προϊόντα με "Add Product to Cart"
+
+## Δεδομένα Συστήματος
+
+### Προεγκατεστημένα Δεδομένα
+- **27 Προϊόντα** σε 8 κατηγορίες:
+  - Dairy (4 προϊόντα)
+  - Fruits (4 προϊόντα) 
+  - Vegetables (4 προϊόντα)
+  - Meat (3 προϊόντα)
+  - Fish (3 προϊόντα)
+  - Bakery (3 προϊόντα)
+  - Beverages (3 προϊόντα)
+  - Snacks (3 προϊόντα)
+
+- **18 Δείγματα Αγορών** για analytics testing
+
+### Database Schema
+```sql
+-- Categories table
+CREATE TABLE category (
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+-- Products table  
+CREATE TABLE product (
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(200) NOT NULL,
+    description TEXT,
+    price FLOAT NOT NULL,
+    category_id INTEGER REFERENCES category(id)
+);
+
+-- Carts table
+CREATE TABLE cart (
+    id INTEGER PRIMARY KEY,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    is_purchased BOOLEAN DEFAULT FALSE,
+    purchased_at DATETIME
+);
+
+-- Cart items table
+CREATE TABLE cart_item (
+    id INTEGER PRIMARY KEY,
+    cart_id INTEGER REFERENCES cart(id),
+    product_id INTEGER REFERENCES product(id),
+    quantity INTEGER NOT NULL DEFAULT 1
+);
+```
+
+##  Αντιμετώπιση Προβλημάτων
+
+### Κοινά Προβλήματα
+
+**1. "Cannot connect to Flask API"**
+```bash
+# Βεβαιωθείτε ότι το Flask app τρέχει
+python app.py
+# Πρέπει να δείτε: "Running on http://127.0.0.1:5000"
+```
+
+**2. "ModuleNotFoundError"**
+```bash
+# Εγκαταστήστε ξανά τις βιβλιοθήκες
+pip install -r requirements.txt
+```
+
+**3. "Database locked" errors**
+```bash
+# Σταματήστε όλα τα Flask instances και ξεκινήστε ξανά
+# Διαγράψτε smartcart.db αν χρειάζεται reset
+rm smartcart.db
+python app.py
+```
+
+**4. Streamlit δεν φορτώνει**
+```bash
+# Ελέγξτε αν το port 8501 είναι ελεύθερο
+netstat -an | grep 8501
+# Χρησιμοποιήστε άλλο port αν χρειάζεται
+streamlit run ui.py --server.port 8502
+```
+
+### Log Files
+- Flask logs εμφανίζονται στο console
+- Streamlit logs επίσης στο console
+- Για debug: ενεργοποιήστε `debug=True` στο app.py
+
+## Τεχνικές Λεπτομέρειες
+
+### Βιβλιοθήκες και Εκδόσεις
+```
+Flask==2.3.3              # Web framework
+Flask-SQLAlchemy==3.0.5    # Database ORM
+requests==2.31.0           # HTTP client
+streamlit==1.28.1          # UI framework
+
+
+### Performance Considerations
+- **Database:** SQLite για development, προτείνεται PostgreSQL για production
+- **API Cache:** Δεν υλοποιήθηκε caching (μελλοντική επέκταση)
+- **Concurrent Users:** Σχεδιασμένο για single user (demo purposes)
+
+### Security Notes
+- **No Authentication:** Σύστημα χωρίς login για απλότητα
+- **CORS Enabled:** Για development purposes
+- **SQL Injection:** Protected από SQLAlchemy ORM
+- **Input Validation:** Basic validation implemented
+
+### Code Structure
+- `app.py` - Main Flask application με όλα τα API endpoints
+- `ui.py` - Streamlit interface με 5 modules
+- `requirements.txt` - Dependencies
+- `README.md` - Documentation
+
+## Υποστήριξη
+
+### Επικοινωνία
+- **Email:** [me2453!unipi.gr]
+- **GitHub Issues:** [repository-url]/issues
+- **University:** Πανεπιστήμιο Πειραιώς, Τμήμα Ψηφιακών Συστημάτων
+
+### Τεκμηρίωση
+- **API Documentation:** Postman collection included
+- **User Guide:** Αυτό το README
+- **Technical Report:** Δείτε το συνοδευτικό .docx αρχείο
+
+---
+
+## License & Credits
+
+**Ακαδημαϊκό Έργο**  
+Πανεπιστήμιο Πειραιώς - ΠΜΣ Πληροφοριακά Συστήματα & Υπηρεσίες  
+Μάθημα: Η Γλώσσα Προγραμματισμού Python  
+Ακαδημαϊκό Έτος: 2024-2025  
+
+**Developed by:** [ΓΙΩΡΓΟΣ ΚΑΛΟΓΕΡΟΠΟΥΛΟΣ] - ΑΜ: [ΜΕ2453]
+                  [ΕΡΜΙΟΝΗ ΚΑΛΟΜΟΙΡΗ] - ΑΜ: [ΜΕ2455]
